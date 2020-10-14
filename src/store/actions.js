@@ -86,7 +86,8 @@ export const authorize = () => async (dispatch) => {
 export const signUp = (param, body) => async (dispatch) => {
   try {
     const res = await fetch(
-      process.env.REACT_APP_BE_URL_API + "users/" + param,
+      `${process.env.REACT_APP_BE_URL_API}users/${param}`,
+      // process.env.REACT_APP_BE_URL_API + "users/" + param,
       {
         method: "POST",
         body: JSON.stringify(body),
@@ -133,7 +134,7 @@ export const logOut = () => async (dispatch) => {
 export const login = (param, body) => async (dispatch) => {
   try {
     const res = await fetch(
-      process.env.REACT_APP_BE_URL_API + "users/" + param,
+      `${process.env.REACT_APP_BE_URL_API}users/${param}`,
       {
         method: "POST",
         body: JSON.stringify(body),
@@ -160,7 +161,7 @@ export const getTimetable = (id) => async (dispatch) => {
   try {
     dispatch(setClassAvailableSpace([]));
     const res = await fetch(
-      process.env.REACT_APP_BE_URL_API + "timetable/" + id
+      `${process.env.REACT_APP_BE_URL_API}timetable/${id}`
     );
     if (res.ok) {
       const timetable = await res.json();
@@ -178,7 +179,7 @@ export const generateTimetable = (id) => async (dispatch) => {
   try {
     dispatch(setClassAvailableSpace([]));
     const res = await fetch(
-      process.env.REACT_APP_BE_URL_API + "timetable/generate" + id
+      `${process.env.REACT_APP_BE_URL_API}timetable/generate/${id}`
     );
     if (res.ok) {
       const timetable = await res.json();
@@ -195,8 +196,7 @@ export const findAvailableSlots = (timetableId, classId) => async (
   dispatch
 ) => {
   const res = await fetch(
-    process.env.REACT_APP_BE_URL_API +
-      `timetable/findAvailableSpace/${timetableId}/${classId}`
+    `${process.env.REACT_APP_BE_URL_API}timetable/findAvailableSpace/${timetableId}/${classId}`
   );
 
   const data = await res.json();
@@ -224,8 +224,8 @@ export const mutateToAvailableSLot = (timetableId, classId, target) => async (
       };
       console.log(classAvailableSpace, body, target.id);
       const res = await fetch(
-        process.env.REACT_APP_BE_URL_API +
-          `timetable/mutateToAvailable/${timetableId}/${classId}`,
+        `${process.env.REACT_APP_BE_URL_API}timetable/mutateToAvailable/${timetableId}/${classId}`,
+
         {
           method: "POST",
           body: JSON.stringify(body),
