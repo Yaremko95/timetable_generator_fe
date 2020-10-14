@@ -65,7 +65,9 @@ const TimetableCell = React.forwardRef((props, ref) => {
         {/*<span> {cl.id}</span>*/}
         <span>
           {" "}
-          <b>{cl.subject}</b>
+          <b>
+            {cl.subject} {cl.id}
+          </b>
         </span>
         <span>
           {" "}

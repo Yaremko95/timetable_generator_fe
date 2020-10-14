@@ -104,7 +104,7 @@ export default (state = initialState, action) => {
           id: e.freeSpace.id,
           freeSpace: e.freeSpace.free_space,
           day: new Date(e.freeSpace.date).getDay(),
-          h: new Date(e.freeSpace.date).getHours(),
+          h: new Date(e.freeSpace.date).getHours() - 2,
           m: new Date(e.freeSpace.date).getMinutes(),
         }));
         return {
@@ -127,7 +127,7 @@ export default (state = initialState, action) => {
           classroomId: slot.classroomId,
           freeSpace: slot.free_space,
           day: new Date(slot.date).getDay(),
-          h: new Date(slot.date).getHours(),
+          h: new Date(slot.date).getHours() - 2,
           m: new Date(slot.date).getMinutes(),
           classId: slot.freeSpace.classId,
         }))
@@ -168,7 +168,7 @@ export default (state = initialState, action) => {
           array.push({
             ...slot,
             day: new Date(slot.date).getDay(),
-            h: new Date(slot.date).getHours(),
+            h: new Date(slot.date).getHours() - 2,
             m: new Date(slot.date).getMinutes(),
           });
         });

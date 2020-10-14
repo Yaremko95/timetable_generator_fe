@@ -3,7 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const authAxios = axios.create({
-  baseURL: process.env.REACT_APP_BE_URL_API,
+  baseURL: "https://timetable-be.herokuapp.com/",
 });
 
 authAxios.interceptors.response.use(

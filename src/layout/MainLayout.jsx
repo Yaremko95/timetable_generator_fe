@@ -187,7 +187,7 @@ function NavBar(props) {
               {/*  </Badge>*/}
               {/*</IconButton>*/}
               <IconButton color="inherit" onClick={handleLogOut}>
-                {/*<ExitToAppIcon />*/}
+                <ExitToAppIcon />
               </IconButton>
             </>
           )}
