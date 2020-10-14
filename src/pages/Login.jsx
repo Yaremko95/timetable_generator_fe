@@ -18,9 +18,6 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { compose } from "redux";
 import { withRouter } from "react-router-dom";
 import { authorize, login, redirect } from "../store/actions";
-// function Alert(props) {
-//   return <MuiAlert elevation={6} variant="filled" {...props} />;
-// }
 
 function Copyright() {
   return (
