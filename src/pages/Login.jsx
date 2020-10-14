@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -13,6 +13,14 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Link as MuLink } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
+import { connect, useDispatch, useSelector } from "react-redux";
+import { compose } from "redux";
+import { withRouter } from "react-router-dom";
+import { authorize, login, redirect } from "../store/actions";
+// function Alert(props) {
+//   return <MuiAlert elevation={6} variant="filled" {...props} />;
+// }
 
 function Copyright() {
   return (
@@ -47,12 +55,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
+function SignIn(props) {
   const classes = useStyles();
   const [credentials, setCredentials] = React.useState({});
+  const state = useSelector((state) => ({
+    error: state.error,
+    redirectTo: state.redirectTo,
+  }));
+  const dispatch = useDispatch();
   const handleLogin = (e) => {
     e.preventDefault();
+    dispatch(login("login", credentials));
   };
+  useEffect(() => {
+    //alert("s");
+
+    if (state.redirectTo) {
+      props.history.push("/");
+      dispatch(redirect(false));
+    }
+  }, [state.redirectTo]);
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -63,7 +85,9 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
+
         <form className={classes.form} noValidate>
+          {state.error && <Alert severity="error">{state.error}!</Alert>}
           <TextField
             variant="outlined"
             margin="normal"
@@ -136,3 +160,18 @@ export default function SignIn() {
     </Container>
   );
 }
+// export default compose(
+//   withRouter,
+//   connect(
+//     (state) => ({ ...state }),
+//     (dispatch) => ({
+//       login: (param, body) => {
+//         dispatch(login(param, body));
+//       },
+//       setError: (value) => {
+//         dispatch(setError(value));
+//       },
+//     })
+//   )
+// )(SignIn);
+export default withRouter(SignIn);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -14,6 +14,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Link } from "react-router-dom";
 import { Link as MuLink } from "@material-ui/core";
+import { connect } from "react-redux";
+import { compose } from "redux";
+import { withRouter } from "react-router-dom";
+import { signUp, redirect } from "../store/actions";
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -50,12 +54,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignUp() {
+function SignUp(props) {
   const classes = useStyles();
   const [credentials, setCredentials] = React.useState({});
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
+
+    props.signUp("signUp", credentials);
   };
+  useEffect(() => {
+    if (props.redirectTo) {
+      props.history.push("/login");
+      props.redirect(null);
+    }
+  }, [props.redirectTo]);
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -176,3 +188,17 @@ export default function SignUp() {
     </Container>
   );
 }
+export default compose(
+  withRouter,
+  connect(
+    (state) => ({ ...state }),
+    (dispatch) => ({
+      signUp: (param, body) => {
+        dispatch(signUp(param, body));
+      },
+      redirect: (value) => {
+        dispatch(redirect(value));
+      },
+    })
+  )
+)(SignUp);

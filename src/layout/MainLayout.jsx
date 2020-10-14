@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -19,6 +19,11 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import { mainListItems, secondaryListItems } from "./mainListItems";
+import { useDispatch, useSelector } from "react-redux";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import { withRouter } from "react-router-dom";
+import Alert from "../components/Alert";
+import { logOut } from "../store/actions";
 
 function Copyright() {
   return (
@@ -102,21 +107,32 @@ const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
+    paddingLeft: "1rem",
+    marginLeft: "12rem",
   },
   paper: {
     padding: theme.spacing(2),
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
+    backgroundColor: "#3d353b",
   },
   fixedHeight: {
     height: 240,
   },
 }));
 
-export default function NavBar(props) {
+function NavBar(props) {
   const classes = useStyles();
-  const [auth, setAuth] = React.useState(false);
+  const state = useSelector((state) => ({
+    authorized: state.authorized,
+  }));
+  const dispatch = useDispatch();
+  const handleLogOut = () => {
+    dispatch(logOut());
+    props.history.push("/login");
+  };
+
   const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -124,6 +140,11 @@ export default function NavBar(props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  // useEffect(() => {
+  //   if (state.error) {
+  //     setOpenAlert(true);
+  //   }
+  // }, [state.error]);
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
@@ -131,10 +152,11 @@ export default function NavBar(props) {
       <CssBaseline />
       <AppBar
         position="absolute"
+        style={{ backgroundColor: "#3d353b" }}
         className={clsx(classes.appBar, open && classes.appBarShift)}
       >
         <Toolbar className={classes.toolbar}>
-          {auth && (
+          {state.authorized && (
             <IconButton
               edge="start"
               color="inherit"
@@ -157,16 +179,21 @@ export default function NavBar(props) {
           >
             Timetable Maker
           </Typography>
-          {auth && (
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+          {state.authorized && (
+            <>
+              {/*<IconButton color="inherit">*/}
+              {/*  <Badge badgeContent={4} color="secondary">*/}
+              {/*    <NotificationsIcon />*/}
+              {/*  </Badge>*/}
+              {/*</IconButton>*/}
+              <IconButton color="inherit" onClick={handleLogOut}>
+                {/*<ExitToAppIcon />*/}
+              </IconButton>
+            </>
           )}
         </Toolbar>
       </AppBar>
-      {auth && (
+      {state.authorized && (
         <Drawer
           variant="permanent"
           classes={{
@@ -179,14 +206,15 @@ export default function NavBar(props) {
               <ChevronLeftIcon />
             </IconButton>
           </div>
-          {/*<Divider />*/}
-          {/*<List>{mainListItems}</List>*/}
-          {/*<Divider />*/}
+          <Divider />
+          <List>{mainListItems}</List>
+          <Divider />
           {/*<List>{secondaryListItems}</List>*/}
         </Drawer>
       )}
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
+        <Alert />
         <Container maxWidth="lg" className={classes.container}>
           {props.children}
         </Container>
@@ -194,3 +222,4 @@ export default function NavBar(props) {
     </div>
   );
 }
+export default withRouter(NavBar);
