@@ -15,10 +15,7 @@ import { createUseStyles } from "react-jss";
 import TimetableCell from "../components/timetable/TimetableCell";
 import gsap, { TimelineLite } from "gsap";
 import { Draggable, TweenLite, Power2 } from "gsap/all";
-import ReactDOM from "react-dom";
-import Snackbar from "@material-ui/core/Snackbar";
-import Alert from "@material-ui/lab/Alert";
-import Container from "@material-ui/core/Container";
+
 import WeekDays from "../components/WeekDays";
 import Hours from "../components/Hours";
 gsap.registerPlugin(Draggable);
