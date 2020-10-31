@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 
 export const mainListItems = (
   <div>
-    <Link to={"/timetable"}>
+    <Link to={"/load"}>
       <ListItem button>
         <ListItemIcon>
           <DashboardIcon />

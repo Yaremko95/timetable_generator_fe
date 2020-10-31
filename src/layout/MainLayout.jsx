@@ -14,7 +14,7 @@ import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import Link from "@material-ui/core/Link";
+import { Link } from "react-router-dom";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
@@ -170,6 +170,7 @@ function NavBar(props) {
               <MenuIcon />
             </IconButton>
           )}
+
           <Typography
             component="h1"
             variant="h6"
@@ -177,8 +178,11 @@ function NavBar(props) {
             noWrap
             className={classes.title}
           >
-            Timetable Maker
+            <Link to={"/"} style={{ color: "white", textDecoration: "none" }}>
+              Timetable Maker
+            </Link>
           </Typography>
+
           {state.authorized && (
             <>
               {/*<IconButton color="inherit">*/}

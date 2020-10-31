@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const authAxios = axios.create({
-  baseURL: process.env.REACT_APP_BE_URL_API,
+  baseURL: process.env.REACT_APP_BE_URL,
 });
 
 authAxios.interceptors.response.use(
@@ -23,7 +23,7 @@ authAxios.interceptors.response.use(
 
       return axios
         .post(
-          `${process.env.REACT_APP_BE_URL_API}users/refreshToken`,
+          `${process.env.REACT_APP_BE_URL}users/refreshToken`,
           {},
           { withCredentials: true }
         )
@@ -33,10 +33,12 @@ authAxios.interceptors.response.use(
 
             return Promise.resolve(res);
           }
+        })
+        .catch((e) => {
+          //console.log(e);
+          return Promise.reject(e);
         });
     }
-
-    return Promise.reject(error);
   }
 );
 

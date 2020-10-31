@@ -59,34 +59,40 @@ export const setToDefault = () => ({
 });
 
 export const authorize = () => async (dispatch) => {
-  const res = await authAxios.get(`/users/me`, {
-    withCredentials: true,
-  });
-
-  if (!res) {
-    const secondRes = await axios.get(`/users/me`, {
+  try {
+    const res = await authAxios.get(`/users/me`, {
       withCredentials: true,
     });
+  } catch (e) {
+    dispatch(setLoading(false));
 
-    if (secondRes.status !== 200) {
-      dispatch(redirect(true));
-    } else {
-      dispatch(setAuthorized(secondRes.data));
-    }
-  } else {
-    if (res.status !== 200) {
-      dispatch(redirect(true));
-    } else {
-      dispatch(setAuthorized(res.data));
-      dispatch(getTimetable(res.data.timetable.id));
-    }
+    // console.log(e);
   }
+
+  // if (!res) {
+  //   const secondRes = await axios.get(`/users/me`, {
+  //     withCredentials: true,
+  //   });
+  //
+  //   if (secondRes.status !== 200) {
+  //     dispatch(redirect(true));
+  //   } else {
+  //     dispatch(setAuthorized(secondRes.data));
+  //   }
+  // } else {
+  //   if (res.status !== 200) {
+  //     dispatch(redirect(true));
+  //   } else {
+  //     dispatch(setAuthorized(res.data));
+  //     dispatch(getTimetable(res.data.timetable.id));
+  //   }
+  //}
 };
 
 export const signUp = (param, body) => async (dispatch) => {
   try {
     const res = await fetch(
-      `https://timetable-be.herokuapp.com/users/${param}`,
+      `${process.env.REACT_APP_BE_URL}/users/${param}`,
       // process.env.REACT_APP_BE_URL_API + "users/" + param,
       {
         method: "POST",
@@ -109,7 +115,7 @@ export const signUp = (param, body) => async (dispatch) => {
 };
 export const logOut = () => async (dispatch) => {
   try {
-    const res = await fetch("https://timetable-be.herokuapp.com/users/logout", {
+    const res = await fetch(`${process.env.REACT_APP_BE_URL}/users/logout`, {
       method: "POST",
       body: JSON.stringify({}),
       headers: {
@@ -133,17 +139,14 @@ export const logOut = () => async (dispatch) => {
 };
 export const login = (param, body) => async (dispatch) => {
   try {
-    const res = await fetch(
-      `https://timetable-be.herokuapp.com/users/${param}`,
-      {
-        method: "POST",
-        body: JSON.stringify(body),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }
-    );
+    const res = await fetch(`${process.env.REACT_APP_BE_URL}users/${param}`, {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
     console.log(res);
     if (!res.ok) {
       const error = await res.json();
@@ -160,9 +163,7 @@ export const login = (param, body) => async (dispatch) => {
 export const getTimetable = (id) => async (dispatch) => {
   try {
     dispatch(setClassAvailableSpace([]));
-    const res = await fetch(
-      `https://timetable-be.herokuapp.com/timetable/${id}`
-    );
+    const res = await fetch(`${process.env.REACT_APP_BE_URL}timetable/${id}`);
     if (res.ok) {
       const timetable = await res.json();
 
@@ -179,7 +180,7 @@ export const generateTimetable = (id) => async (dispatch) => {
   try {
     dispatch(setClassAvailableSpace([]));
     const res = await fetch(
-      `https://timetable-be.herokuapp.com/timetable/generate${id}`
+      `${process.env.REACT_APP_BE_URL}/timetable/generate${id}`
     );
     if (res.ok) {
       const timetable = await res.json();
@@ -196,7 +197,7 @@ export const findAvailableSlots = (timetableId, classId) => async (
   dispatch
 ) => {
   const res = await fetch(
-    `https://timetable-be.herokuapp.com/timetable/findAvailableSpace/${timetableId}/${classId}`
+    `${process.env.REACT_APP_BE_URL}/timetable/findAvailableSpace/${timetableId}/${classId}`
   );
 
   const data = await res.json();
@@ -224,7 +225,7 @@ export const mutateToAvailableSLot = (timetableId, classId, target) => async (
       };
       console.log(classAvailableSpace, body, target.id);
       const res = await fetch(
-        `https://timetable-be.herokuapp.com/timetable/mutateToAvailable/${timetableId}/${classId}`,
+        `${process.env.REACT_APP_BE_URL}timetable/mutateToAvailable/${timetableId}/${classId}`,
 
         {
           method: "POST",

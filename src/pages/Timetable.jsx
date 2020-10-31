@@ -10,7 +10,7 @@ import {
   setError,
   setMessage,
 } from "../store/actions";
-import AuthHoc from "../auth/withAuth";
+import AuthHoc from "../components/auth/withAuth";
 import { createUseStyles } from "react-jss";
 import TimetableCell from "../components/timetable/TimetableCell";
 import gsap, { TimelineLite } from "gsap";
