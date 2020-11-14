@@ -9,6 +9,7 @@ import { VscEdit } from "react-icons/vsc";
 import colors from "../../clors";
 const TimetableCell = React.forwardRef((props, ref) => {
   const { cell, cl } = props;
+  console.log(cl.id, cell.height * cl.duration, cell.height, cl.duration);
   const useStyles = createUseStyles({
     container: {
       fontSize: "0.6rem",
@@ -17,7 +18,7 @@ const TimetableCell = React.forwardRef((props, ref) => {
       backgroundColor:
         colors[Math.floor(Math.random() * Math.floor(colors.length))],
       width: cell.width - 1,
-      height: cell.height * cl.duration - cl.duration - 1,
+
       zIndex: "100",
       color: "whitesmoke",
       display: "flex",
@@ -25,6 +26,7 @@ const TimetableCell = React.forwardRef((props, ref) => {
       justifyContent: "flex-start",
       //alignItems: "center",
       ...props.style,
+      // height: cell.height * cl.duration + "px",
       // "&:hover": {
       "&:hover::after": {
         position: "absolute",
@@ -57,27 +59,34 @@ const TimetableCell = React.forwardRef((props, ref) => {
       <div
         onClick={props.onClick}
         ref={ref}
-        style={{ ...props.style }}
+        style={{
+          ...props.style,
+          height: cell.height * cl.duration - cl.duration + "px",
+        }}
         className={classes.container}
         onMouseEnter={handleMouseHover}
         onMouseLeave={handleMouseHover}
       >
         {/*<span> {cl.id}</span>*/}
-        <span>
-          {" "}
-          <b>
-            {cl.subject} {cl.id}
-          </b>
-        </span>
-        <span>
-          {" "}
-          Teacher: <i>{cl.teacher.name + " " + cl.teacher.surname}</i>
-        </span>
-        <span>
-          Groups: <i>{cl.groups.map((el) => el.title).join(", ")}</i>
-        </span>
+        {/*<span>*/}
+        {/*  {" "}*/}
+        {/*  <b>*/}
+        {/*    {cl.subject} {cl.id}*/}
+        {/*  </b>*/}
+        {/*</span>*/}
+        {/*<span>*/}
+        {/*  {" "}*/}
+        {/*  Teacher: <i>{cl.teacher.name + " " + cl.teacher.surname}</i>*/}
+        {/*</span>*/}
+        {/*<span>*/}
+        {/*  Groups: <i>{cl.groups.map((el) => el.title).join(", ")}</i>*/}
+        {/*</span>*/}
         {/*<span>{cl.classrooms.map((el) => el.id).join(", ")}</span>*/}
-        <span>Duration: {cl.duration + "hrs"}</span>
+        {/*<span>Duration: {cl.duration + "hrs"}</span>*/}
+        <span>
+          {cl.filled.map((c) => "day " + c.day + " hour " + c.h).join()}
+        </span>
+        <span>{cl.id}</span>
         {isHovering && (
           <>
             <span

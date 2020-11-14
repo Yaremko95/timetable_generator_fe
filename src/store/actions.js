@@ -63,36 +63,41 @@ export const authorize = () => async (dispatch) => {
     const res = await authAxios.get(`/users/me`, {
       withCredentials: true,
     });
+    console.log(res);
+    if (!res) {
+      const secondRes = await axios.get(`/users/me`, {
+        withCredentials: true,
+      });
+
+      if (secondRes.status !== 200) {
+        dispatch(redirect(true));
+        dispatch(setLoading(false));
+      } else {
+        dispatch(setAuthorized(secondRes.data));
+        dispatch(setLoading(false));
+      }
+    } else {
+      if (res.status !== 200) {
+        dispatch(redirect(true));
+        dispatch(setLoading(false));
+      } else {
+        dispatch(setAuthorized(res.data));
+        dispatch(getTimetable(res.data.timetable.id));
+        //alert(res.data.id);
+        dispatch(setLoading(false));
+      }
+    }
   } catch (e) {
     dispatch(setLoading(false));
 
     // console.log(e);
   }
-
-  // if (!res) {
-  //   const secondRes = await axios.get(`/users/me`, {
-  //     withCredentials: true,
-  //   });
-  //
-  //   if (secondRes.status !== 200) {
-  //     dispatch(redirect(true));
-  //   } else {
-  //     dispatch(setAuthorized(secondRes.data));
-  //   }
-  // } else {
-  //   if (res.status !== 200) {
-  //     dispatch(redirect(true));
-  //   } else {
-  //     dispatch(setAuthorized(res.data));
-  //     dispatch(getTimetable(res.data.timetable.id));
-  //   }
-  //}
 };
 
 export const signUp = (param, body) => async (dispatch) => {
   try {
     const res = await fetch(
-      `${process.env.REACT_APP_BE_URL}/users/${param}`,
+      `${process.env.REACT_APP_BE_URL}users/${param}`,
       // process.env.REACT_APP_BE_URL_API + "users/" + param,
       {
         method: "POST",
@@ -115,7 +120,7 @@ export const signUp = (param, body) => async (dispatch) => {
 };
 export const logOut = () => async (dispatch) => {
   try {
-    const res = await fetch(`${process.env.REACT_APP_BE_URL}/users/logout`, {
+    const res = await fetch(`${process.env.REACT_APP_BE_URL}users/logout`, {
       method: "POST",
       body: JSON.stringify({}),
       headers: {
@@ -180,7 +185,7 @@ export const generateTimetable = (id) => async (dispatch) => {
   try {
     dispatch(setClassAvailableSpace([]));
     const res = await fetch(
-      `${process.env.REACT_APP_BE_URL}/timetable/generate${id}`
+      `${process.env.REACT_APP_BE_URL}timetable/generate${id}`
     );
     if (res.ok) {
       const timetable = await res.json();
@@ -197,7 +202,7 @@ export const findAvailableSlots = (timetableId, classId) => async (
   dispatch
 ) => {
   const res = await fetch(
-    `${process.env.REACT_APP_BE_URL}/timetable/findAvailableSpace/${timetableId}/${classId}`
+    `${process.env.REACT_APP_BE_URL}timetable/findAvailableSpace/${timetableId}/${classId}`
   );
 
   const data = await res.json();

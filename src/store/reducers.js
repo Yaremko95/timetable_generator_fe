@@ -100,13 +100,15 @@ export default (state = initialState, action) => {
     case C.SET_CLASSES: {
       const { payload } = action;
       const classes = payload.classes.map((cl) => {
-        cl.filled = cl.filled.map((e) => ({
-          id: e.freeSpace.id,
-          freeSpace: e.freeSpace.free_space,
-          day: new Date(e.freeSpace.date).getDay(),
-          h: new Date(e.freeSpace.date).getHours() - 2,
-          m: new Date(e.freeSpace.date).getMinutes(),
-        }));
+        cl.filled = cl.filled
+          .map((e) => ({
+            id: e.freeSpace.id,
+            freeSpace: e.freeSpace.free_space,
+            day: new Date(e.freeSpace.date).getDay(),
+            h: new Date(e.freeSpace.date).getHours(),
+            m: new Date(e.freeSpace.date).getMinutes(),
+          }))
+          .sort((a, b) => (a.h > b.h ? 1 : b.h > a.h ? -1 : 0));
         return {
           ...cl,
           filled: cl.filled,
@@ -127,7 +129,7 @@ export default (state = initialState, action) => {
           classroomId: slot.classroomId,
           freeSpace: slot.free_space,
           day: new Date(slot.date).getDay(),
-          h: new Date(slot.date).getHours() - 2,
+          h: new Date(slot.date).getHours(),
           m: new Date(slot.date).getMinutes(),
           classId: slot.freeSpace.classId,
         }))
@@ -161,6 +163,7 @@ export default (state = initialState, action) => {
       // id: 1266
       // isFree: true
       // timetableId: 107
+
       payload.forEach((arr) => {
         const array = [];
         arr.forEach((slot) => {
@@ -168,7 +171,7 @@ export default (state = initialState, action) => {
           array.push({
             ...slot,
             day: new Date(slot.date).getDay(),
-            h: new Date(slot.date).getHours() - 2,
+            h: new Date(slot.date).getHours(),
             m: new Date(slot.date).getMinutes(),
           });
         });

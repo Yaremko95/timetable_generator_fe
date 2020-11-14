@@ -5,7 +5,7 @@ import { withRouter, Redirect } from "react-router-dom";
 import { setUser, authorize } from "../../store/actions";
 
 const withAuth = (Component) => (props) => {
-  const { authorizedUser, authorize, redirect, loading } = props;
+  const { authorized, authorize, redirect, loading } = props;
 
   useEffect(() => {
     // const authorize = async () => {
@@ -43,8 +43,7 @@ const withAuth = (Component) => (props) => {
     authorize();
   }, []);
   if (!loading) {
-    alert(redirect);
-    if (!authorizedUser) {
+    if (!authorized) {
       return <Redirect to={"/login"} />;
     } else {
       return <Component {...props} />;
@@ -60,7 +59,7 @@ const composedAuthHOC = compose(
       return {
         loading: state.loading,
         redirect: state.redirectTo,
-        authorizedUser: state.authorizedUser,
+        authorized: state.authorized,
       };
     },
     (dispatch) => ({
